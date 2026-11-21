@@ -1,0 +1,138 @@
+# St Louis ribs on a 57cm Weber Smokey Mountain, water pan, Minion method.
+# Built from the 22 Nov 2026 test-smoke plan. Times in minutes, temperatures in °C.
+id: st_louis_ribs
+name: St Louis Ribs
+description: >
+  Wrapped St Louis ribs at 120–130°C on the grate. Done by feel (probe-tender,
+  rack bends and cracks), not by temperature.
+weight:
+  default_kg: 1.4
+  min_kg: 0.5
+  max_kg: 4.0
+pit:
+  target_low: 120
+  target_high: 130
+  alert_low: 115
+  alert_high: 135
+  sustain_min: 5
+  lid_recovery_min: 12
+  # Pit alerts stay off until this event has been logged (avoids alarms during fire-up)
+  alerts_from_event: pit_stable
+  # ...and stop once the ribs are off
+  alerts_until_event: off_smoker
+meat:
+  # Meat alerts stay off until the probe is in the meat
+  alerts_from_event: ribs_on
+  alerts:
+    - temp: 70
+      title: Wrap check
+      message: "Meat is at {meat}°C. Check the bark: mahogany colour and the rub doesn't smear when touched. If it's set, wrap."
+    - temp: 90
+      title: Start probing
+      message: "Meat is at {meat}°C. Start probing between the bones for tenderness."
+    - temp: 93
+      title: Typical done range
+      message: "Meat is at {meat}°C, the typical done range. Decide by feel: probe slides in like soft butter, rack bends and the surface cracks."
+phases:
+  - id: fire_up
+    name: Fire-up
+    duration_min: 45
+    steps:
+      - id: load_ring
+        title: Load the charcoal ring
+        detail: "Fill the ring about half full of unlit briquettes. Bury 2–3 fist-sized cherry chunks in the unlit charcoal. Leave a small well in the middle."
+      - id: light_chimney
+        title: Light the chimney
+        detail: "Light 10–15 briquettes in the chimney. Wait until they're ashed over on top (about 15 minutes)."
+        log: chimney_lit
+        starts_cook: true
+      - id: assemble
+        title: Pour the coals and assemble
+        detail: "Pour the lit briquettes into the well on top of the unlit ring. Fit the middle section, fill the water pan with water, fit the grates and put the lid on."
+      - id: vents_open
+        title: Open all vents
+        detail: "Bottom vents fully open. Top vent fully open, and it stays fully open for the whole cook. Set the bottom vent position on the dashboard whenever you change it."
+      - id: pit_probe
+        title: Fit the pit probe
+        detail: "Clip the pit probe at top-grate level next to where the ribs will go. Not the lid thermometer."
+      - id: stabilise
+        title: Let the pit stabilise at 120–130°C
+        detail: "As the pit passes about 105°C, close the bottom vents to about 25% open so it doesn't overshoot. This step finishes by itself once the pit has held 120–130°C for 10 minutes."
+        auto: pit_stable
+        auto_minutes: 10
+        log: pit_stable
+  - id: smoke
+    name: Smoke (unwrapped)
+    duration_min: 180
+    end_prompt: "Planned smoke time is up. Check the bark: mahogany colour, rub doesn't smear (about 70–75°C internal). Wrap when it's set."
+    reminders:
+      - id: spritz
+        anchor_event: ribs_on
+        start_after_min: 90
+        every_min: 45
+        until_event: wrap
+        title: Spritz due
+        message: "Spritz the ribs with 50/50 cider vinegar and apple juice. Be quick: each lid opening costs 10–15 minutes. Log it on the dashboard."
+    steps:
+      - id: ribs_on
+        title: Ribs on
+        detail: "Ribs on, meat side up. Push the meat probe between two bones in the thickest part, tip not touching bone."
+        log: ribs_on
+        opens_lid: true
+      - id: smoke_hold
+        title: Smoke with the lid closed
+        detail: "Keep the lid shut and hold 120–130°C. First spritz is due about 90 minutes after the ribs went on, then every 45 minutes until you wrap. Tap Next when the bark is set and you're ready to wrap."
+  - id: wrapped
+    name: Wrapped
+    duration_min: 135
+    end_prompt: "Planned wrap time is up. Probe for tenderness. If it's still tight, keep cooking and check again in 15 minutes."
+    steps:
+      - id: wrap
+        title: Wrap
+        detail: "Double layer of heavy-duty foil: a few knobs of butter, about 1 tbsp soft light brown sugar, a drizzle of honey and a splash of spritz. Ribs meat side down. Back on the grate with the probe through the foil."
+        log: wrap
+        opens_lid: true
+      - id: wrapped_hold
+        title: Hold 120–130°C, wrapped
+        detail: "Keep the lid closed. Start probing for tenderness about 90 minutes after wrapping, or at 90°C internal. Log each probe check on the dashboard."
+        due_after_min: 90
+        due_message: "90 minutes wrapped. Start probing between the bones for tenderness."
+      - id: probe_tender
+        title: Probe-tender?
+        detail: "The probe slides between the bones like soft butter, and the rack bends and the surface cracks when lifted in the middle. If it's still tight, keep cooking and check every 15 minutes. Tap Next only when it's tender."
+        log: probe_tender
+  - id: finish
+    name: Unwrapped finish
+    duration_min: 30
+    steps:
+      - id: unwrap
+        title: Unwrap
+        detail: "Foil off, ribs back on the grate meat side up. Sauce now if you're using it."
+        log: unwrap
+        opens_lid: true
+      - id: set_bark
+        title: Firm up the bark
+        detail: "20–30 minutes with the lid closed, until the bark is firm or the sauce has set."
+        due_after_min: 25
+        due_message: "Ribs have been unwrapped for 25 minutes. Check the bark or sauce has set."
+      - id: off_smoker
+        title: Off the smoker
+        detail: "Take the ribs off. Close the bottom vents fully to put the fire out."
+        log: off_smoker
+  - id: rest
+    name: Rest
+    duration_min: 15
+    steps:
+      - id: rest
+        title: Rest, then slice
+        detail: "Rest 10–15 minutes, then slice between the bones. Afterwards, record how it came out: tenderness, bark, smoke flavour, moisture."
+        due_after_min: 12
+        due_message: "Rest time is up. Slice and record how it came out."
+events:
+  chimney_lit: Chimney lit
+  pit_stable: Pit stable
+  ribs_on: Ribs on
+  wrap: Wrapped
+  probe_tender: Probe-tender
+  unwrap: Unwrapped
+  off_smoker: Off the smoker

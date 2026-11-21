@@ -1,0 +1,13 @@
+{
+  "domain": "smoke_session",
+  "name": "Smoke Session",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/",
+  "requirements": [],
+  "single_config_entry": false,
+  "version": "0.1.0"
+}

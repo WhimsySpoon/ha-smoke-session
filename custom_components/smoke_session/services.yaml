@@ -1,0 +1,63 @@
+start_session:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: smoke_session
+    profile:
+      example: st_louis_ribs
+      selector:
+        text:
+    weight_kg:
+      selector:
+        number:
+          min: 0.1
+          max: 20
+          step: 0.1
+          unit_of_measurement: kg
+    planned_start:
+      selector:
+        time:
+next_step:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: smoke_session
+log_event:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: smoke_session
+    event_type:
+      required: true
+      selector:
+        select:
+          options: [lid_open, spritz, probe_check, note]
+    note:
+      selector:
+        text:
+          multiline: true
+end_session:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: smoke_session
+    notes:
+      selector:
+        text:
+          multiline: true
+reset:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: smoke_session
+get_session:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: smoke_session

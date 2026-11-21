@@ -1,0 +1,69 @@
+# A short rehearsal you can run indoors with the probes at room temperature.
+# Warm a probe in your hand or a mug of warm water to trigger the alerts.
+id: dry_run
+name: Dry Run (indoors test)
+sort: 99
+description: >
+  A 20-minute rehearsal of the whole flow at room temperature, to check
+  notifications, steps and the dashboard before a real cook.
+weight:
+  default_kg: 1.0
+  min_kg: 0.1
+  max_kg: 5.0
+pit:
+  target_low: 15
+  target_high: 28
+  alert_low: 12
+  alert_high: 32
+  sustain_min: 1
+  lid_recovery_min: 2
+  alerts_from_event: pit_stable
+meat:
+  alerts_from_event: meat_in
+  alerts:
+    - temp: 30
+      title: Dry run meat alert
+      message: "Meat probe reads {meat}°C. The meat alert works."
+phases:
+  - id: start
+    name: Start
+    duration_min: 5
+    steps:
+      - id: begin
+        title: Start the rehearsal
+        detail: "Tap Next to start the clock."
+        log: chimney_lit
+        starts_cook: true
+      - id: stabilise
+        title: Wait for the pit probe to settle
+        detail: "Leave the pit probe at room temperature. This finishes by itself after 1 minute between 15 and 28°C."
+        auto: pit_stable
+        auto_minutes: 1
+        log: pit_stable
+  - id: middle
+    name: Middle
+    duration_min: 10
+    end_prompt: "Dry run: the Middle phase's planned time is up."
+    reminders:
+      - id: spritz
+        anchor_event: meat_in
+        start_after_min: 2
+        every_min: 3
+        until_event: done
+        title: Dry run reminder
+        message: "Recurring reminder test."
+    steps:
+      - id: meat_in
+        title: Meat probe in
+        detail: "Hold the meat probe in your hand. Warm the pit probe to over 32°C for a minute to test the pit-high alert."
+        log: meat_in
+        opens_lid: true
+      - id: done
+        title: Finish
+        detail: "Tap Next to finish the rehearsal."
+        log: done
+events:
+  chimney_lit: Started
+  pit_stable: Pit settled
+  meat_in: Meat probe in
+  done: Finished

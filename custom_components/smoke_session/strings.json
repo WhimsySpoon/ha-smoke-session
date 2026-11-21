@@ -1,0 +1,130 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up a smoker",
+        "description": "Pick the probe sensors. The pit probe sits at grate level; the meat probes are optional and you choose which one is in the meat for each cook.",
+        "data": {
+          "name": "Smoker name",
+          "pit_sensor": "Pit (ambient) probe",
+          "meat_sensors": "Meat probes",
+          "notify_script": "Notification script",
+          "important_destinations": "Send alerts to",
+          "info_destinations": "Send reminders to"
+        },
+        "data_description": {
+          "notify_script": "Called with destination, title, message, tag, icon and is_important, the same fields as script.send_notification."
+        }
+      }
+    },
+    "error": {
+      "pit_in_meat": "The pit probe can't also be a meat probe.",
+      "no_destination": "Choose at least one destination for alerts and for reminders."
+    },
+    "abort": {
+      "already_configured": "This pit probe is already set up as a smoker."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Smoker settings",
+        "data": {
+          "pit_sensor": "Pit (ambient) probe",
+          "meat_sensors": "Meat probes",
+          "notify_script": "Notification script",
+          "important_destinations": "Send alerts to",
+          "info_destinations": "Send reminders to"
+        }
+      }
+    },
+    "error": {
+      "pit_in_meat": "The pit probe can't also be a meat probe.",
+      "no_destination": "Choose at least one destination for alerts and for reminders."
+    }
+  },
+  "selector": {
+    "destination": {
+      "options": {
+        "aaron": "Aaron's phone",
+        "cogger": "Cogger's phone",
+        "phones": "Both phones",
+        "tv": "TVs"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {"name": "Status", "state": {"idle": "Idle", "active": "Cooking", "finished": "Finished"}},
+      "phase": {"name": "Phase"},
+      "current_step": {"name": "Current step"},
+      "recommendation": {"name": "Recommendation"},
+      "pit_status": {"name": "Pit status", "state": {"offline": "Offline", "below": "Too cold", "low": "Low", "in_band": "In range", "high": "High", "above": "Too hot"}},
+      "pit_trend": {"name": "Pit trend"},
+      "meat_rate": {"name": "Meat rate"},
+      "meat_eta": {"name": "Meat ETA"},
+      "next_reminder": {"name": "Next reminder"},
+      "elapsed": {"name": "Cook time"},
+      "projected_finish": {"name": "Projected finish"},
+      "pit_in_target": {"name": "Pit time in target"},
+      "pit_temperature": {"name": "Pit temperature"},
+      "meat_temperature": {"name": "Meat temperature"}
+    },
+    "binary_sensor": {
+      "lid_recovering": {"name": "Lid recovery"},
+      "stall": {"name": "Stall"},
+      "pit_alert": {"name": "Pit alert"}
+    },
+    "button": {
+      "start_session": {"name": "Start session"},
+      "next_step": {"name": "Next step"},
+      "log_spritz": {"name": "Log spritz"},
+      "log_lid_open": {"name": "Log lid open"},
+      "log_probe_check": {"name": "Log probe check"},
+      "end_session": {"name": "End session"}
+    },
+    "select": {
+      "cook": {"name": "Cook"},
+      "bottom_vents": {"name": "Bottom vents"},
+      "meat_probe": {"name": "Meat probe"}
+    },
+    "number": {
+      "meat_weight": {"name": "Meat weight"}
+    },
+    "time": {
+      "planned_start": {"name": "Planned start"}
+    }
+  },
+  "services": {
+    "start_session": {
+      "name": "Start session",
+      "description": "Arms a cook. Reminders start 15 minutes before the planned start.",
+      "fields": {
+        "config_entry_id": {"name": "Smoker", "description": "Only needed with more than one smoker."},
+        "profile": {"name": "Cook", "description": "Profile id, e.g. st_louis_ribs."},
+        "weight_kg": {"name": "Weight", "description": "Meat weight in kg."},
+        "planned_start": {"name": "Planned start", "description": "When the chimney gets lit."}
+      }
+    },
+    "next_step": {"name": "Next step", "description": "Marks the current step done.", "fields": {"config_entry_id": {"name": "Smoker", "description": "Only needed with more than one smoker."}}},
+    "log_event": {
+      "name": "Log event",
+      "description": "Adds an event to the cook log.",
+      "fields": {
+        "config_entry_id": {"name": "Smoker", "description": "Only needed with more than one smoker."},
+        "event_type": {"name": "Event", "description": "lid_open, spritz, probe_check or note."},
+        "note": {"name": "Note", "description": "Free text, e.g. how a probe check felt."}
+      }
+    },
+    "end_session": {
+      "name": "End session",
+      "description": "Ends the cook and saves a summary.",
+      "fields": {
+        "config_entry_id": {"name": "Smoker", "description": "Only needed with more than one smoker."},
+        "notes": {"name": "Result notes", "description": "Tenderness, bark, smoke flavour, moisture."}
+      }
+    },
+    "reset": {"name": "Reset", "description": "Clears a finished session from the dashboard.", "fields": {"config_entry_id": {"name": "Smoker", "description": "Only needed with more than one smoker."}}},
+    "get_session": {"name": "Get session", "description": "Returns the full log, timeline and summary.", "fields": {"config_entry_id": {"name": "Smoker", "description": "Only needed with more than one smoker."}}}
+  }
+}
