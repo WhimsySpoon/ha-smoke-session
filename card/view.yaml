@@ -5,14 +5,14 @@ icon: mdi:grill
 type: sidebar
 cards:
   - type: custom:smoke-session-card
-    entity: sensor.wsm_smoke_session_status
+    entity: sensor.smoker_smoke_session_status
   - type: history-graph
     view_layout:
       position: sidebar
     title: Pit and meat
     hours_to_show: 8
     entities:
-      - entity: sensor.wsm_smoke_session_pit_temperature
+      - entity: sensor.smoker_smoke_session_pit_temperature
         name: Pit
-      - entity: sensor.wsm_smoke_session_meat_temperature
+      - entity: sensor.smoker_smoke_session_meat_temperature
         name: Meat
