@@ -1,12 +1,14 @@
 {
   "domain": "smoke_session",
   "name": "Smoke Session",
-  "codeowners": [],
+  "codeowners": [
+    "@WhimsySpoon"
+  ],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/",
+  "documentation": "https://github.com/WhimsySpoon/ha-smoke-session",
   "iot_class": "calculated",
-  "issue_tracker": "https://github.com/",
+  "issue_tracker": "https://github.com/WhimsySpoon/ha-smoke-session/issues",
   "requirements": [],
   "single_config_entry": false,
   "version": "0.1.0"
